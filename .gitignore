@@ -1,0 +1,4 @@
+django_env/
+node_modules/
+Phitron/
+populate_db.py

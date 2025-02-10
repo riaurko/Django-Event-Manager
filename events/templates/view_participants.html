@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>All Participants</title>
+    </head>
+    <body class="bg-slate-900">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold font-mono text-green-500 text-center my-4 px-10 py-4 bg-green-950 w-fit mx-auto rounded-md">All Participants</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <h4 class="text-white font-semibold text-lg px-6 py-2 w-fit mx-auto rounded-lg {% if message.tags == 'success' %}bg-green-700{% endif %} {% if message.tags == 'error' %}bg-red-700{% endif %}">{{ message }}</h4>
+            {% endfor %}
+        {% endif %}
+        <div class="mx-6 sm:mx-16 lg:mx-24 my-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {% for participant in participants %}
+                <div class="p-8 rounded-xl space-y-6 bg-slate-800 text-slate-200">
+                    <h3 class="text-3xl font-bold text-green-100">{{ participant.name }}</h3>
+                    <p class="text-xl"><span class="font-semibold mr-2">Email:</span> {{ participant.email }}</p>
+                    <div class="flex justify-between md:justify-end gap-4">
+                        <button type="button" class="px-5 py-1 bg-blue-800 hover:bg-blue-900 text-slate-100 rounded-md text-xl font-semibold"><a href="{% url 'update-participant' participant.id %}">Edit</a></button>
+                        <form action="{% url 'delete-participant' participant.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="px-5 py-1 bg-rose-800 hover:bg-rose-900 text-slate-100 rounded-md text-xl font-semibold">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>
