@@ -20,9 +20,9 @@ def dashboard(request):
     elif event_type == 'today':
         events = base_event_query.filter(date=date.today())
     elif event_type == 'upcoming':
-        events = base_event_query.filter(date__gte=date.fromisoformat("2025-01-01"), date__lte=date.today())
-    elif event_type == 'past':
         events = base_event_query.filter(date__gte=date.today(), date__lte=date.fromisoformat("2034-12-31"))
+    elif event_type == 'past':
+        events = base_event_query.filter(date__gte=date.fromisoformat("2025-01-01"), date__lte=date.today())
     context = {
         'events': events,
         'past_events': past_events,
