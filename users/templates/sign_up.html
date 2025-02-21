@@ -1,0 +1,78 @@
+{% comment %} {% load static %} {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta charset="UTF-8" />
+		<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/975/975392.png" type="image/x-icon">
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+		<title>Sign Up | EventSync</title>
+		<style>
+			nav > ul > li:hover ul {
+                display: block;
+            }
+		</style>
+	</head>
+	<body class="bg-slate-950 space-y-16 font-['Montserrat']">
+		<header>
+            <nav class="flex items-center justify-around px-16 py-6 text-slate-100">
+                <a href="{% url "land" %}">
+                    <div class="title flex items-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="40">
+                        <h2 class="text-4xl font-extrabold tracking-wide bg-gradient-to-r from-green-500 to-indigo-500 text-transparent bg-clip-text">EventSync</h2>
+                    </div>
+                </a>
+                <ul class="flex gap-12 text-xl font-medium">
+                    <li class="font-bold"><a href="">Dashboard</a></li>
+                    <li class="cursor-default">Groups
+                        <ul class="bg-slate-950 bg-opacity-75 border-2 border-green-800 rounded-lg mt-1 py-2 hidden absolute">
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-group" %}" target="_blank">View All</a></li>
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "create-group" %}" target="_blank">Create New</a></li>
+                        </ul>
+                    </li>
+                    <li class="cursor-default">Manage
+                        <ul class="bg-slate-950 bg-opacity-75 border-2 border-green-800 rounded-lg mt-1 py-2 hidden absolute">
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-event" %}" target="_blank">Events</a></li>
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-category" %}" target="_blank">Categories</a></li>
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-participant" %}" target="_blank">Participants</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+		<main class="m-20">
+			<form method="POST" class="space-y-4 border border-green-800 bg-slate-800 rounded-xl mx-auto px-8 py-6 w-fit">
+				{% if messages %}
+				{% for message in messages %}
+				<h5 class="px-4 py-2 text-2xl font-medium bg-green-900 text-green-500"><span class="fas fa-check-circle"></span> {{ message }}</h5>
+				{% endfor %}
+				{% endif %}
+				{% csrf_token %}
+				<h2 class="text-4xl bg-gradient-to-r from-green-300 to-green-950 text-transparent bg-clip-text text-center font-bold pb-4">Sign Up</h2>
+				{% for field in form %}
+				<p>
+					<label for="{{ field.id_for_label }}" class="text-slate-100 text-xl font-medium mr-2">{{ field.label }}:</label>
+					{{ field }}
+					{% if field.errors %}
+					<ul>
+						{% for error in field.errors %}
+						<li>{{ error }}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</p>
+				{% endfor %}
+				{% if form.non_field_errors %}
+				<ul>
+					{% for error in form.non_field_errors %}
+					<li>{{ error }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+				<button type="submit" class="my-2 px-4 py-2 bg-green-700 hover:bg-green-800 text-slate-100 hover:text-slate-300 font-semibold text-2xl rounded-lg">Sign Up</button>
+				<p class="text-lg text-slate-100">Already have an account? Then <a href="{% url "login" %}" class="text-green-700 hover:text-green-700 text-xl hover:underline font-medium">Sign In</a>.</p>
+			</form>
+		</main>
+	</body>
+</html>

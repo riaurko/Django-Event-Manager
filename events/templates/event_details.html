@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+        <title>{{event.category.name}} Event</title>
+        <style>
+        </style>
+    </head>
+    <body class="bg-slate-950 text-green-100">
+        <div class="m-6 md:mx-20 md:my-12 space-y-10">
+            <h2 class="text-5xl font-bold text-green-200">{{event.name}}</h2>
+            <p class="text-2xl"><span class="font-semibold">Description:</span><br/>{{event.description}}</p>
+            <h5 class="text-2xl space-x-2">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span class="font-medium">Event Due Date:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.date}}</span>
+            </h5>
+            <h5 class="text-2xl space-x-2">
+                <i class="fa-solid fa-clock"></i>
+                <span class="font-medium">Event Due Time:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.time}}</span>
+            </h5>
+            <h5 class="text-2xl space-x-2">
+                <i class="fa-solid fa-location-dot"></i>
+                <span class="font-medium">Event Due Location:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.location}}</span>
+            </h5>
+            <h5 class="text-2xl space-x-2">
+                <i class="fa-solid fa-table-list"></i>
+                <span class="font-medium">Event's Category:</span> <span class="px-4 py-1 bg-green-900 rounded-md">{{event.category.name}}</span>
+            </h5>
+            <div class="text-3xl">
+                <i class="fa-solid fa-users-line mb-4"></i>
+                <span class="font-medium pl-2 mb-4">Participants &lpar;{{ event.partice_count }}&rpar;:</span><br/>
+                <div class="space-y-4">
+                    {% for partice in participants %}
+                    <p class="space-x-4 text-2xl"><i class="fa-solid fa-user text-xl"></i> {{partice.name}} &lpar;{{partice.email}}&rpar;</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

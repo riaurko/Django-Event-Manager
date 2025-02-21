@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>Organizer Dashboard</title>
+        <style>
+            nav > ul > li ul {
+                display: none;
+                position: absolute;
+            }
+            nav > ul > li:hover ul {
+                display: block;
+            }
+        </style>
+    </head>
+    <body class="bg-slate-950 text-slate-100 font-['Questrial'] tracking-wider">
+        <header>
+            <nav class="flex flex-col lg:flex-row justify-between items-center px-8 lg:px-40 py-4 gap-4 lg:gap-0">
+                <h2 class="text-4xl text-green-600 font-bold">Organizer Dashboard</h2>
+                <ul class="flex gap-12 text-xl font-semibold tracking-wider">
+                    <li class="cursor-pointer">Create New
+                        <ul class="space-y-2 font-medium border border-green-200 rounded-md p-5 bg-slate-950 bg-opacity-75">
+                            <li><a href="{% url 'create-event' %}" target="_blank">Event</a></li>
+                            <li><a href="{% url 'create-category' %}" target="_blank">Category</a></li>
+                            <li><a href="{% url 'create-participant' %}" target="_blank">Participant</a></li>
+                        </ul>
+                    </li>
+                    <li class="cursor-pointer">View All
+                        <ul class="space-y-2 font-medium border border-green-200 rounded-md p-5 bg-slate-950 bg-opacity-75">
+                            <li><a href="{% url 'view-event' %}" target="_blank">Events</a></li>
+                            <li><a href="{% url 'view-category' %}" target="_blank">Categories</a></li>
+                            <li><a href="{% url 'view-participant' %}" target="_blank">Participants</a></li>
+                        </ul>
+                    </li>
+                    <li class="hidden md:inline-block"><a href="">News</a></li>
+                    <li class="hidden md:inline-block"><a href="https://preview.themeforest.net/item/imami-islamic-center-mosque-elementor-pro-template-kit/full_screen_preview/51755479?_ga=2.62342764.1124453009.1739049403-1209406621.1736178780" target="_blank">Gallery</a></li>
+                    <li><a href="">Exit</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main class="space-y-20 px-6 lg:px-40 py-8">
+            <div class="stats-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="p-4 lg:p-8 bg-slate-900 border border-slate-800 rounded-lg">
+                    <a href="" class="flex flex-col gap-4">
+                        <i class="fa-solid fa-users-line text-3xl text-slate-300"></i>
+                        <h4 class="text-2xl lg:text-3xl text-slate-400 font-semibold">TOTAL PARTICIPANTS</h4>
+                        <h3 class="text-4xl lg:text-5xl w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-green-500 font-semibold grid place-items-center">{{ total_participants.counter }}</h3>
+                    </a>
+                </div>
+                <div class="p-4 lg:p-8 bg-slate-900 border border-slate-800 rounded-lg">
+                    <a href="{% url 'dashboard' %}?type=all" class="flex flex-col gap-4">
+                        <i class="fa-solid fa-calendar-week text-3xl text-slate-300"></i>
+                        <h4 class="text-2xl lg:text-3xl text-slate-400 font-semibold">TOTAL EVENTS</h4>
+                        <h3 class="text-4xl lg:text-5xl w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-green-500 font-semibold grid place-items-center">{{ total_events.counter }}</h3>
+                    </a>
+                </div>
+                <div class="p-4 lg:p-8 bg-slate-900 border border-slate-800 rounded-lg">
+                    <a href="{% url 'dashboard' %}?type=upcoming" class="flex flex-col gap-4">
+                        <i class="fa-solid fa-calendar-plus text-3xl text-slate-300"></i>
+                        <h4 class="text-2xl lg:text-3xl text-slate-400 font-semibold">UPCOMING EVENTS</h4>
+                        <h3 class="text-4xl lg:text-5xl w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-green-500 font-semibold grid place-items-center">{{ upcoming_events.counter }}</h3>
+                    </a>
+                </div>
+                <div class="p-4 lg:p-8 bg-slate-900 border border-slate-800 rounded-lg">
+                    <a href="{% url 'dashboard' %}?type=past" class="flex flex-col gap-4">
+                        <i class="fa-solid fa-calendar-check text-3xl text-slate-300"></i>
+                        <h4 class="text-2xl lg:text-3xl text-slate-400 font-semibold">PAST EVENTS</h4>
+                        <h3 class="text-4xl lg:text-5xl w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-green-500 font-semibold grid place-items-center">{{ past_events.counter }}</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="space-y-8">
+                <h2 class="text-5xl font-bold text-green-300">Events</h2>
+                <div class="dynamic-events grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {% for event in events %}
+                    <div class="p-8 bg-slate-800 rounded-xl border border-slate-600 space-y-4">
+                        <h3 class="text-3xl text-green-100">{{ event.name }}</h3>
+                        <p class="text-lg"><span class="font-semibold tracking-widest">Description:</span> {{ event.description|slice:":50" }}...</p>
+                        <h5 class="text-xl">Location: <span class="bg-slate-600 p-1 ml-2">{{ event.location }}</span></h5>
+                        <h5 class="text-xl">Category: <span class="bg-slate-600 p-1 border border-slate-500 rounded ml-2">{{ event.category.name }}</span></h5>
+                        <h5 class="text-xl">Participants: <span class="bg-slate-600 p-1 border border-slate-500 rounded ml-1">{{ event.partice_count }}</span></h5>
+                        <div class="flex justify-end">
+                            <button type="button" class="font-semibold text-xl bg-green-900 hover:bg-green-800 rounded-md px-4 py-2"><a href="{% url "event-details" event.id %}" target="_blank">More Info</a></button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

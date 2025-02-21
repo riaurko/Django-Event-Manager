@@ -1,0 +1,7 @@
+django_env/
+node_modules/
+Phitron/
+static/
+populate_db.py
+tailwind.config.js
+.env

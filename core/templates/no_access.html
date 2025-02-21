@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/975/975392.png" type="image/x-icon">
+        <script src="https://cdn.tailwindcss.com/"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <title>No Permission to Access | EventSync</title>
+    </head>
+    <body class="bg-slate-950 text-slate-100 font-['Montserrat']">
+        <header>
+            <nav class="flex items-center justify-around px-16 py-6">
+                <a href="{% url "land" %}">
+                    <div class="title flex items-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="40">
+                        <h2 class="text-4xl font-extrabold tracking-wide bg-gradient-to-r from-green-500 to-indigo-500 text-transparent bg-clip-text">EventSync</h2>
+                    </div>
+                </a>
+                <ul class="flex gap-12 text-xl font-medium">
+                    <li class="hover:font-semibold text-green-500" disabled><a href="{% url "login" %}">Log In</a></li>
+                    <li class="hover:font-semibold text-blue-500" disabled><a href="{% url "sign-up" %}">Sign Up</a></li>
+                    <form action="{% url "logout" %}" method="POST">
+                        {% csrf_token %}
+                        <li class="hover:font-semibold text-red-500"><button type="submit">Log Out</button></li>
+                    </form>
+                </ul>
+            </nav>
+        </header>
+        <main class="mt-20 space-y-5">
+            <h1 class="text-center text-5xl text-red-800 font-bold">Error 423: Locked</h1>
+            <h3 class="text-center text-3xl text-blue-900 font-bold">Currently you do not have access to this page.</h3>
+        </main>
+    </body>
+</html>

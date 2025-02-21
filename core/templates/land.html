@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/975/975392.png" type="image/x-icon">
+        <script src="https://cdn.tailwindcss.com/"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <title>Start | EventSync</title>
+    </head>
+    <body class="bg-slate-950 text-slate-100 font-['Montserrat'] px-24 py-4">
+        {% csrf_token %}
+        <h1 class="text-4xl font-bold">EventSync | Sync your Events Prettily</h1>
+        {% if user.is_authenticated %}
+        <h6 class="text-xl">{{ user }}</h6>
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="mt-2 px-3 py-1 bg-slate-800 font-semibold text-xl rounded-md">Logout</button>
+        </form>
+        {% else %}
+        <h6 class="text-xl">Annonymous</h6>
+        {% endif %}
+    </body>
+</html>

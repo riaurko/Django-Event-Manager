@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2206/2206368.png" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+        <script src="https://cdn.tailwindcss.com/"></script>
+        <title>Admin Dashboard | EventSync</title>
+        <style>
+            nav > ul > li:hover ul {
+                display: block;
+            }
+        </style>
+    </head>
+    <body class="bg-slate-950 text-slate-100 font-['Montserrat']">
+        <header>
+            <nav class="flex items-center justify-around px-16 py-6">
+                <a href="{% url "land" %}">
+                    <div class="title flex items-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="40">
+                        <h2 class="text-4xl font-extrabold tracking-wide bg-gradient-to-r from-green-500 to-indigo-500 text-transparent bg-clip-text">EventSync</h2>
+                    </div>
+                </a>
+                <ul class="flex gap-12 text-xl font-medium">
+                    <li class="font-bold"><a href="">Dashboard</a></li>
+                    <li class="cursor-default">Groups <span class="fas fa-caret-down"></span>
+                        <ul class="bg-slate-950 bg-opacity-75 border-2 border-green-800 rounded-lg mt-1 py-2 hidden absolute">
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-group" %}" target="_blank">View All</a></li>
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "create-group" %}" target="_blank">Create New</a></li>
+                        </ul>
+                    </li>
+                    <li class="cursor-default">Manage <span class="fas fa-caret-down"></span>
+                        <ul class="bg-slate-950 bg-opacity-75 border-2 border-green-800 rounded-lg mt-1 py-2 hidden absolute">
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-event" %}" target="_blank">Events</a></li>
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-category" %}" target="_blank">Categories</a></li>
+                            <li class="hover:bg-slate-800 px-5 py-2"><a href="{% url "view-participant" %}" target="_blank">Participants</a></li>
+                        </ul>
+                    </li>
+                    <form action="{% url "logout" %}" method="POST">
+                        {% csrf_token %}
+                        <li class="hover:font-semibold text-red-500"><button type="submit">Log Out</button></li>
+                    </form>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="flex items-end justify-center gap-5">
+                <img src="https://cdn-icons-png.flaticon.com/512/2206/2206368.png" width="48">
+                <h1 class="text-4xl bg-gradient-to-r from-green-400 to-green-800 text-transparent bg-clip-text font-extrabold mt-8">Admin {{ user.username }}'s Dashboard</h1>
+            </div>
+            <section class="user-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mx-16 mb-6 mt-16">
+                {% for user in users %}
+                <div class="space-y-4 p-8 rounded-2xl bg-slate-900">
+                    <div class="flex justify-between">
+                        <h3 class="text-4xl grid place-items-center font-semibold w-14 h-14 bg-green-700 text-slate-900 hover:text-slate-800 rounded-full">{{ forloop.counter }}</h3>
+                        <h3 class="fas fa-id-card text-5xl text-green-800 hover:text-green-700"></h3>
+                    </div>
+                    <p class="text-2xl"><span class="fas fa-id-badge text-green-700"></span> USER ID: {{ user.id }}</p>
+                    <h4 class="text-2xl font-medium text-green-50"><span class="fas fa-signature text-green-700"></span> <span class="font-semibold">FULL NAME:</span> {{ user.get_full_name|default:"N/A" }}</h4>
+                    <p class="text-xl"><span class="fas fa-envelope text-green-700"></span> <span class="font-medium">EMAIL:</span><br/>{{ user.email|default:"Not Provided" }}</p>
+                    <p class="text-xl"><span class="fas fa-user-tag text-green-700"></span> <span class="font-medium">ROLE:</span><br/>{{ user.group_name }}</p>
+                    <a href="{% url 'assign-role' user.id %}" target="_blank"><button type="button" class="mt-4 bg-green-700 hover:bg-green-800 text-slate-900 rounded-lg hover:rounded-md px-6 py-2 text-xl font-semibold">Change Role</button></a>
+                </div>
+                {% endfor %}
+            </section>
+        </main>
+    </body>
+</html>
