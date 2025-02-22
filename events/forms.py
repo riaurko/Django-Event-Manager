@@ -40,6 +40,14 @@ class StylesMixin:
                 field.widget.attrs.update({
                     'class': f"{self.common_classes} w-48"
                 })
+            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    'class': f"{self.common_classes} w-fit"
+                })
+            elif isinstance(field.widget, forms.FileInput):
+                field.widget.attrs.update({
+                    'class': self.common_classes
+                })
 
 #* Event Creation ModelForm
 class CreateEvent(StylesMixin, forms.ModelForm):
@@ -51,6 +59,7 @@ class CreateEvent(StylesMixin, forms.ModelForm):
             'time': forms.TimeInput(attrs={
                 'type': 'time'
             }),
+            'participants': forms.CheckboxSelectMultiple
         }
     def __init__(self, *args, **kwargs):
         categories = kwargs.pop('categories', [])
@@ -63,15 +72,6 @@ class CreateCategory(StylesMixin, forms.ModelForm):
     class Meta:
         model = Category
         fields = '__all__'
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.WidgetStyles()
-
-#* Participant Registeration ModelForm
-class CreateParticipant(StylesMixin, forms.ModelForm):
-    class Meta:
-        model = Participant
-        exclude = ['events']
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.WidgetStyles()

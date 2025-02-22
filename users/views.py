@@ -1,18 +1,22 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from django.db.models import Count, Q, Prefetch
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.tokens import default_token_generator
 from datetime import date
-from users.forms import UserSignUp, AssignRole, CreateGroup
-from events.models import Event, Participant
+from users.forms import UserSignUp, UserLogin, AssignRole, CreateGroup
+from events.models import Event
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
 
 def is_organizer(user):
     return user.groups.filter(name='Organizer').exists()
+
+def is_participant(user):
+    return user.groups.filter(name='Participant').exists()
 
 def sign_up(request):
     form = UserSignUp()
@@ -28,14 +32,26 @@ def sign_up(request):
     return render(request, "sign_up.html", {'form': form})
 
 def log_in(request):
+    form = UserLogin()
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
+        form = UserLogin(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
             return redirect("land")
-    return render(request, "login.html")
+    return render(request, "login.html", {'form': form})
+
+def activate_user(request, user_id, token):
+    try:
+        user = User.objects.get(id=user_id)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return redirect('login')
+        else:
+            return HttpResponse("<h3>Invalid Id or Token</h3>")
+    except User.DoesNotExist:
+        return HttpResponse("<h3>404: Not Found<br/>User Not Found</h3>")
 
 @login_required
 def log_out(request):
@@ -75,7 +91,7 @@ def view_group(request):
 @login_required
 @user_passes_test(is_admin, 'no-access')
 def admin_dashboard(request):
-    users = User.objects.prefetch_related(Prefetch('groups', Group.objects.all(), 'all_groups')).all()
+    users = User.objects.prefetch_related(Prefetch('groups', Group.objects.all(), 'all_groups')).all().order_by('id')
     for user in users:
         if user.all_groups:
             user.group_name = user.all_groups[0].name
@@ -90,7 +106,7 @@ def organizer_dashboard(request):
     events_count = Event.objects.aggregate(counter=Count('id'))
     past_events = Event.objects.filter(date__gte=date.fromisoformat("2025-01-01"), date__lt=date.today()).aggregate(counter=Count('id'))
     future_events = Event.objects.filter(date__gt=date.today(), date__lte=date.fromisoformat("2034-12-31")).aggregate(counter=Count('id'))
-    participants_count = Participant.objects.aggregate(counter=Count('id'))
+    # participants_count = Participant.objects.aggregate(counter=Count('id'))
     base_event_query = Event.objects.annotate(partice_count=Count('participants')).select_related('category').prefetch_related('participants')
 
     if event_type == 'all':
@@ -107,6 +123,6 @@ def organizer_dashboard(request):
         'past_events': past_events,
         'upcoming_events': future_events,
         'total_events': events_count,
-        'total_participants': participants_count,
+        # 'total_participants': participants_count,
     }
     return render(request, "organizer/dashboard.html", context)

@@ -3,42 +3,26 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from datetime import date
 from events.models import *
-from events.forms import CreateEvent, CreateCategory, CreateParticipant
+from events.forms import CreateEvent, CreateCategory
+from users.views import is_admin, is_organizer, is_participant
 
-#* Manager Page Home View
+#* Role-Based Dashboard
 def dashboard(request):
-    event_type = request.GET.get('type', 'today')
-    # participants = Participant.objects.all()
-    # events_partices_count = Participant.objects.annotate(counter=Count('events'))
-    events_count = Event.objects.aggregate(counter=Count('id'))
-    past_events = Event.objects.filter(date__gte=date.fromisoformat("2025-01-01"), date__lte=date.today()).aggregate(counter=Count('id'))
-    future_events = Event.objects.filter(date__gte=date.today(), date__lte=date.fromisoformat("2034-12-31")).aggregate(counter=Count('id'))
-    participants_count = Participant.objects.aggregate(counter=Count('id'))
-    base_event_query = Event.objects.annotate(partice_count=Count('participants')).select_related('category').prefetch_related('participants')
-    if event_type == 'all':
-        events = base_event_query.all()
-    elif event_type == 'today':
-        events = base_event_query.filter(date=date.today())
-    elif event_type == 'upcoming':
-        events = base_event_query.filter(date__gte=date.today(), date__lte=date.fromisoformat("2034-12-31"))
-    elif event_type == 'past':
-        events = base_event_query.filter(date__gte=date.fromisoformat("2025-01-01"), date__lte=date.today())
-    context = {
-        'events': events,
-        'past_events': past_events,
-        'upcoming_events': future_events,
-        'total_participants': participants_count,
-        'total_events': events_count,
-    }
-    return render(request, 'dashboard.html', context)
+    if is_admin(request.user):
+        return redirect('admin-db')
+    elif is_organizer(request.user):
+        return redirect('organizer-db')
+    # elif is_participant(request.user):
+    #     return redirect('admin-db')
+    return redirect('no-access')
 
 #* Event Creation View
 def create_event(request):
     categories = Category.objects.all()
-    participants = Participant.objects.all()
+    # participants = Participant.objects.all()
     form = CreateEvent(categories=categories)
     if request.method == "POST":
-        form = CreateEvent(request.POST)
+        form = CreateEvent(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Bravo! New Event Created Successfully.")
@@ -57,19 +41,6 @@ def create_category(request):
             messages.error(request, "Sorry Brother! Category with that Name already exist.")
     context = {'form': form}
     return render(request, 'create_category.html', context)
-
-#* Participant Registering View
-def create_participant(request):
-    form = CreateParticipant()
-    if request.method == "POST":
-        form = CreateParticipant(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Bravo! New Participant Added.")
-        else:
-            messages.error(request, "Hey! Copying another User's Email? Cheater!")
-    context = {'form': form}
-    return render(request, 'create_participant.html', context)
 
 #* All Event Viewing View
 def view_events(request):
@@ -99,11 +70,6 @@ def view_categories(request):
     categories = Category.objects.all()
     return render(request, 'view_categories.html', {'categories': categories})
 
-#* All Participant Viewing View
-def view_participants(request):
-    participants = Participant.objects.all()
-    return render(request, 'view_participants.html', {'participants': participants})
-
 #* Event Updating View
 def update_event(request, id):
     event = Event.objects.get(id=id)
@@ -132,17 +98,17 @@ def update_category(request, id):
     return render(request, 'create_category.html', context)
 
 #* Participant Updating View
-def update_participant(request, id):
-    participant = Participant.objects.get(id=id)
-    form = CreateParticipant(instance=participant)
-    if request.method == "POST":
-        form = CreateParticipant(request.POST, instance=participant)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Okay! Participant Info Updated.")
-        else:
-            messages.error(request, "Hey, don't coopyy another's Email!")
-    context = {'form': form}
+# def update_participant(request, id):
+#     participant = Participant.objects.get(id=id)
+#     form = CreateParticipant(instance=participant)
+#     if request.method == "POST":
+#         form = CreateParticipant(request.POST, instance=participant)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Okay! Participant Info Updated.")
+#         else:
+#             messages.error(request, "Hey, don't coopyy another's Email!")
+#     context = {'form': form}
     return render(request, 'create_participant.html', context)
 
 #* Event Deleting View
@@ -166,14 +132,14 @@ def delete_category(request, id):
         messages.error(request, "Shit, Something went Wrong!")
 
 #* Participant Deleting View
-def delete_participant(request, id):
-    if request.method == 'POST':
-        participant = Participant.objects.get(id=id)
-        participant.delete()
-        messages.success(request, "Bye Bye Participant!")
-        return redirect('view-participant')
-    else:
-        messages.error(request, "Shit, Something went Wrong!")
+# def delete_participant(request, id):
+#     if request.method == 'POST':
+#         participant = Participant.objects.get(id=id)
+#         participant.delete()
+#         messages.success(request, "Bye Bye Participant!")
+#         return redirect('view-participant')
+#     else:
+#         messages.error(request, "Shit, Something went Wrong!")
 
 #* Event Details View
 def event_details(request, id):
@@ -181,7 +147,3 @@ def event_details(request, id):
     participants = event.participants.all()
     return render(request, "event_details.html", {'event': event, 'participants': participants})
 
-
-
-"""
-"""

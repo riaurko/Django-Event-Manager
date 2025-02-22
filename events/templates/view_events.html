@@ -31,14 +31,22 @@
         </div>
         <div class="mx-6 sm:mx-16 lg:mx-24 my-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
             {% for event in events %}
-                <div class="p-8 rounded-xl space-y-6 bg-slate-800 text-slate-200">
-                    <h3 class="text-3xl font-bold text-green-100">{{ event.name }}</h3>
-                    <p class="text-xl"><span class="font-medium mr-2">Due Date:</span> {{ event.date }}</p>
-                    <p class="text-xl"><span class="font-medium mr-2">Due Location:</span> {{ event.location }}</p>
-                    <h5 class="text-xl font-semibold">Category: <span class="ml-2 px-3 py-1 rounded-md font-medium bg-slate-300 text-slate-800">{{ event.category.name }}</span></h5>
-                    <h5 class="text-xl font-semibold">Participants: <span class="ml-2 px-3 rounded-md font-medium bg-slate-300 text-slate-800">{{ event.partice_count }}</span></h5>
+                <div class="p-8 rounded-xl bg-slate-800 text-slate-200 space-y-6">
+                    <div class="flex justify-between">
+                        <div class="space-y-4">
+                            <h3 class="text-3xl font-bold text-green-100">{{ event.name }}</h3>
+                            <p class="text-xl"><span class="font-medium mr-2">Due Date:</span> {{ event.date }}</p>
+                            <p class="text-xl"><span class="font-medium mr-2">Due Location:</span> {{ event.location }}</p>
+                            <h5 class="text-xl font-semibold">Category: <span class="ml-2 px-3 py-1 rounded-md font-medium bg-slate-300 text-slate-800">{{ event.category.name }}</span></h5>
+                            <h5 class="text-xl font-semibold">Participants: <span class="ml-2 px-3 rounded-md font-medium bg-slate-300 text-slate-800">{{ event.partice_count }}</span></h5>
+                        </div>
+                        <img src={{event.thumb.url}} alt="Event Thumbnail" class="w-32 rounded-md">
+                    </div>
                     <div class="flex flex-col sm:flex-row gap-4 md:gap-0 justify-between">
-                        <button type="button" class="font-semibold text-xl bg-green-600 hover:bg-green-800 rounded-md px-4 py-1"><a href="{% url "event-details" event.id %}" target="_blank">More Information</a></button>
+                        <div class="flex justify-between md:justify-start gap-4">
+                            <button type="button" class="font-semibold text-xl bg-green-600 hover:bg-green-800 rounded-md px-4 py-1"><a href="{% url "event-details" event.id %}" target="_blank">More Information</a></button>
+                            <button type="button" class="font-semibold text-xl bg-indigo-600 hover:bg-indigo-800 rounded-md px-5 py-1"><a href="">RSVP</a></button>
+                        </div>
                         <div class="flex justify-between md:justify-end gap-4">
                             <button type="button" class="px-5 py-1 bg-blue-800 hover:bg-blue-900 text-slate-100 rounded-md text-xl font-semibold"><a href="{% url 'update-event' event.id %}">Edit</a></button>
                             <form action="{% url 'delete-event' event.id %}" method="POST">

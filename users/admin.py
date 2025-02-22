@@ -1,9 +1,9 @@
 # nq@websoft#x0
-# Phi#bee5
 # nin9#h2oTech
 
-# dalgona >> Dalgona#457
-# ddakji >> DDakji#457
+# kitomi >> Kit0mi$4858
+# samemel >> saMeMel$851
+# momin >> alIashraf#2040
 
 # admin 123456
 # ninjaquasar nq@pass#000

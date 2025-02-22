@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.forms import AuthenticationForm
 from events.forms import StylesMixin
 import re
 
@@ -53,6 +54,11 @@ class UserSignUp(StylesMixin, forms.ModelForm):
         if error_list:
             raise forms.ValidationError(error_list)
         return password
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.WidgetStyles()
+
+class UserLogin(StylesMixin, AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.WidgetStyles()
