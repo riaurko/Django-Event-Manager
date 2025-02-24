@@ -169,4 +169,4 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
 LOGIN_URL = 'login'
 
-FRONTEND_URL = 'http://127.0.0.1:8000'
+FRONTEND_URL = 'https://django-event-manager.onrender.com'
