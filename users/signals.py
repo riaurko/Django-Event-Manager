@@ -29,6 +29,6 @@ def send_activation_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def assign_role(sender, instance, created, **kwargs):
     if created:
-        participant_group = Group.objects.get(name='Participant')
+        participant_group = Group.objects.get_or_create(name='Participant')
         instance.groups.add(participant_group)
         instance.save()
