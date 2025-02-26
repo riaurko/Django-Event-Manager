@@ -10,4 +10,9 @@
 # subrota Su975618
 # nila Subta1234##
 # subrotachandra Subta1234##
+
+# username: zishan344
+# pass: 1234
+# username: admin
+# password: 123456
 from django.contrib import admin

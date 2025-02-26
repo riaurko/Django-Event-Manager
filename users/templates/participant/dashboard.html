@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="icon" href="https://cdn-icons-png.freepik.com/512/1464/1464174.png" type="image/x-icon">
+        <script src="https://cdn.tailwindcss.com/"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <title></title>
+        <style>
+            nav > ul > li:hover ul {
+                display: block;
+            }
+        </style>
+    </head>
+    <body class="bg-slate-950 text-slate-100 font-['Montserrat']">
+        <header>
+            <nav class="flex items-center justify-around px-16 py-6">
+                <a href="{% url "land" %}">
+                    <div class="title flex items-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="40">
+                        <h2 class="text-4xl font-extrabold tracking-wide bg-gradient-to-r from-green-500 to-indigo-500 text-transparent bg-clip-text">EventSync</h2>
+                    </div>
+                </a>
+                <ul class="flex gap-12 text-xl font-medium">
+                    {% if user.is_authenticated %}
+                    <li class="font-bold"><a href="">Home</a></li>
+                    <li class="hover:font-semibold"><a href="{% url "dashboard" %}">Dashboard</a></li>
+                    <li class="hover:font-semibold"><a href="">Contact</a></li>
+                    <form action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-400 hover:text-red-500 hover:font-semibold rounded-md">Logout</button>
+                    </form>
+                    {% else %}
+                    <li class="font-bold"><a href="">Home</a></li>
+                    <li class="hover:font-semibold text-green-200"><a href="{% url "login" %}">Login</a></li>
+                    <li class="hover:font-semibold"><a href="{% url "sign-up" %}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+        <main class="mx-6 md:mx-20 my-12"></main>
+    </body>
+</html>

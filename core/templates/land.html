@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/975/975392.png" type="image/x-icon">
         <script src="https://cdn.tailwindcss.com/"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
         <title>Start | EventSync</title>
         <style>
@@ -39,19 +40,15 @@
                 </ul>
             </nav>
         </header>
-        <main class="mx-20 mt-12">
-            {% if user.is_authenticated %}
-            <h2 class="text-4xl text-center font-bold text-green-400">Welcome {{ user }}</h2>
-            {% else %}
-            <h2 class="text-4xl text-center font-bold text-green-400">Welcome Annonymous</h2>
-            {% endif %}
-            <section class="banner my-16 flex items-center justify-between">
-                <div class="banner-content w-3/5 space-y-5">
+        <main class="mx-6 md:mx-20 my-12">
+            <h2 class="text-3xl md:text-4xl text-center font-bold text-green-400">Welcome {{ user }}</h2>
+            <section class="banner my-16 flex md:gap-0 gap-8 md:flex-row flex-col items-center justify-between">
+                <div class="banner-content md:w-3/5 space-y-5">
                     <h1 class="text-5xl font-bold text-green-100">EventSync</h1>
                     <h3 class="text-3xl font-bold text-indigo-100">Synchronize &amp; Organize your Events prettily</h3>
-                    <p class="text-lg font-medium w-4/5">Seamlessly Plan, Organize, and Elevate Your Events with EventSync! From small gatherings to grand conferences, our all-in-one event management platform simplifies every step. Effortlessly create, manage, and track events while ensuring smooth registrations and seamless coordination. Stay organized, engage attendees, and make every event a success—because great events start with great planning!</p>
+                    <p class="text-lg font-medium md:w-4/5 line-clamp-6 md:line-clamp-none">Seamlessly Plan, Organize, and Elevate Your Events with EventSync! From small gatherings to grand conferences, our all-in-one event management platform simplifies every step. Effortlessly create, manage, and track events while ensuring smooth registrations and seamless coordination. Stay organized, engage attendees, and make every event a success!</p>
                 </div>
-                <div class="banner-images w-2/5 flex flex-col gap-1">
+                <div class="banner-images md:w-2/5 flex flex-col gap-1">
                     <img src="https://www.anantabd.net/wp-content/uploads/2020/04/How-to-Start-Event-Management-Business-in-Bangladesh.jpg">
                     <div class="flex gap-1">
                         <img src="https://www.proglobalevents.com/wp-content/uploads/bigstock-People-Planning-Concept-Entre-327380749-1.jpg" class="w-1/2">
@@ -60,18 +57,18 @@
                 </div>
             </section>
         </main>
-        <footer class="bg-indigo-900 p-20 space-y-20">
-            <div class="flex justify-between">
+        <footer class="bg-indigo-900 p-10 lg:p-20 space-y-20">
+            <div class="flex lg:gap-0 gap-4 lg:flex-row flex-col justify-between">
                 <div class="foot-title flex items-center gap-2">
                     <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="36">
                     <h3 class="text-3xl font-bold tracking-wide bg-gradient-to-r from-yellow-500 to-orange-500 text-transparent bg-clip-text">EventSync</h3>
                 </div>
                 <h4 class="text-2xl text-green-100 font-medium">Synchronize &amp; Organize your Events prettily</h4>
             </div>
-            <div class="foot-links flex justify-between">
+            <div class="foot-links flex md:gap-0 gap-8 md:flex-row flex-col justify-between">
                 <div class="space-y-4">
                     <h6 class="text-xl font-bold">Quick Links</h6>
-                    <ul class="space-y-2 text-lg">
+                    <ul class="grid gap-4 grid-cols-2 md:grid-cols-1 text-lg">
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Home</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Contact Us</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Dashboard</li>
@@ -80,9 +77,9 @@
                 </div>
                 <div class="space-y-4">
                     <h6 class="text-xl font-bold">About Us</h6>
-                    <ul class="space-y-2 text-lg">
+                    <ul class="grid gap-4 grid-cols-2 md:grid-cols-1 text-lg">
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Guides</li>
-                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Our Team</li>
+                        <li class="hover:font-semibold font-medium cursor-pointer">Our Team</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Blogs</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Courses</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Development Repo</li>
@@ -91,7 +88,7 @@
                 </div>
                 <div class="space-y-4">
                     <h6 class="text-xl font-bold">Legal</h6>
-                    <ul class="space-y-2 text-lg">
+                    <ul class="grid gap-4 grid-cols-2 md:grid-cols-1 text-lg">
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Terms & Conditions</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Privacy Policy</li>
                         <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Fund Policy</li>
@@ -100,11 +97,11 @@
                 </div>
                 <div class="space-y-4">
                     <h6 class="text-xl font-bold">Social</h6>
-                    <ul class="space-y-2 text-lg">
-                        <li class="hover:font-semibold hover:scale-105 transition-transform text-blue-600"><i class="fas fa-linkedin"></i></li>
-                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Privacy Policy</li>
-                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Fund Policy</li>
-                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">License</li>
+                    <ul class="flex gap-8 text-4xl">
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-blue-600"><i class="fab fa-linkedin"></i></li>
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-blue-500"><i class="fab fa-facebook"></i></li>
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-gray-900"><i class="fab fa-github"></i></li>
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-black"><i class="fab fa-x-twitter"></i></li>
                     </ul>
                 </div>
             </div>

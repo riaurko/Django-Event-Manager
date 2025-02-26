@@ -1,10 +1,9 @@
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
 from events.views import *
 
 urlpatterns = [
     path('dashboard/', dashboard, name="dashboard"),
+    path('<int:event_id>/rsvp/<int:user_id>', rsvp_event, name="rsvp"),
     path('create-event/', create_event, name="create-event"),
     path('create-category/', create_category, name="create-category"),
     path('view-events/', view_events, name="view-event"),
@@ -15,5 +14,3 @@ urlpatterns = [
     path('delete-category/<int:id>', delete_category, name="delete-category"),
     path('event-info/<int:id>', event_details, name="event-details"),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, doument_root=settings.MEDIA_ROOT)

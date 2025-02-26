@@ -11,35 +11,111 @@
         </style>
     </head>
     <body class="bg-slate-950 text-green-100">
-        <div class="m-6 md:mx-20 md:my-12 space-y-10">
-            <img src={{event.thumb.url}} alt="Thumbnail" class="w-80 rounded-lg">
-            <h2 class="text-5xl font-bold text-green-200">{{event.name}}</h2>
-            <p class="text-2xl"><span class="font-semibold">Description:</span><br/>{{event.description}}</p>
-            <h5 class="text-2xl space-x-2">
-                <i class="fa-solid fa-calendar-day"></i>
-                <span class="font-medium">Event Due Date:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.date}}</span>
-            </h5>
-            <h5 class="text-2xl space-x-2">
-                <i class="fa-solid fa-clock"></i>
-                <span class="font-medium">Event Due Time:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.time}}</span>
-            </h5>
-            <h5 class="text-2xl space-x-2">
-                <i class="fa-solid fa-location-dot"></i>
-                <span class="font-medium">Event Due Location:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.location}}</span>
-            </h5>
-            <h5 class="text-2xl space-x-2">
-                <i class="fa-solid fa-table-list"></i>
-                <span class="font-medium">Event's Category:</span> <span class="px-4 py-1 bg-green-900 rounded-md">{{event.category.name}}</span>
-            </h5>
-            <div class="text-3xl">
-                <i class="fa-solid fa-users-line mb-4"></i>
-                <span class="font-medium pl-2 mb-4">Participants &lpar;{{ event.partice_count }}&rpar;:</span><br/>
-                <div class="space-y-4">
-                    {% for partice in participants %}
-                    <p class="space-x-4 text-2xl"><i class="fa-solid fa-user text-xl"></i> {{partice.get_full_name}} &lpar;{{partice.username}}&rpar;</p>
-                    {% endfor %}
+        <header>
+            <nav class="flex items-center justify-around px-16 py-6">
+                <a href="{% url "land" %}">
+                    <div class="title flex items-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="40">
+                        <h2 class="text-4xl font-extrabold tracking-wide bg-gradient-to-r from-green-500 to-indigo-500 text-transparent bg-clip-text">EventSync</h2>
+                    </div>
+                </a>
+                <ul class="flex gap-12 text-xl font-medium">
+                    {% if user.is_authenticated %}
+                    <li class="font-bold"><a href="">Home</a></li>
+                    <li class="hover:font-semibold"><a href="{% url "dashboard" %}">Dashboard</a></li>
+                    <li class="hover:font-semibold"><a href="">Contact</a></li>
+                    <form action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-400 hover:text-red-500 hover:font-semibold rounded-md">Logout</button>
+                    </form>
+                    {% else %}
+                    <li class="font-bold"><a href="">Home</a></li>
+                    <li class="hover:font-semibold text-green-200"><a href="{% url "login" %}">Login</a></li>
+                    <li class="hover:font-semibold"><a href="{% url "sign-up" %}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="m-6 md:mx-20 md:my-12 space-y-10">
+                <img src={{event.thumb.url}} alt="Thumbnail" class="w-80 rounded-lg">
+                <h2 class="text-5xl font-bold text-green-200">{{event.name}}</h2>
+                <p class="text-2xl"><span class="font-semibold">Description:</span><br/>{{event.description}}</p>
+                <h5 class="text-2xl space-x-2">
+                    <i class="fa-solid fa-calendar-day"></i>
+                    <span class="font-medium">Event Due Date:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.date}}</span>
+                </h5>
+                <h5 class="text-2xl space-x-2">
+                    <i class="fa-solid fa-clock"></i>
+                    <span class="font-medium">Event Due Time:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.time}}</span>
+                </h5>
+                <h5 class="text-2xl space-x-2">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span class="font-medium">Event Due Location:</span> <span class="px-3 py-1 bg-green-950 rounded">{{event.location}}</span>
+                </h5>
+                <h5 class="text-2xl space-x-2">
+                    <i class="fa-solid fa-table-list"></i>
+                    <span class="font-medium">Event's Category:</span> <span class="px-4 py-1 bg-green-900 rounded-md">{{event.category.name}}</span>
+                </h5>
+                <div class="text-3xl">
+                    <i class="fa-solid fa-users-line mb-4"></i>
+                    <span class="font-medium pl-2 mb-4">Participants &lpar;{{ event.partice_count }}&rpar;:</span><br/>
+                    <div class="space-y-4">
+                        {% for partice in participants %}
+                        <p class="space-x-4 text-2xl"><i class="fa-solid fa-user text-xl"></i> {{partice.get_full_name}} &lpar;{{partice.username}}&rpar;</p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
+        <footer class="bg-indigo-900 p-10 lg:p-20 space-y-20">
+            <div class="flex lg:gap-0 gap-4 lg:flex-row flex-col justify-between">
+                <div class="foot-title flex items-center gap-2">
+                    <img src="https://cdn-icons-png.flaticon.com/512/975/975392.png" width="36">
+                    <h3 class="text-3xl font-bold tracking-wide bg-gradient-to-r from-yellow-500 to-orange-500 text-transparent bg-clip-text">EventSync</h3>
+                </div>
+                <h4 class="text-2xl text-green-100 font-medium">Synchronize &amp; Organize your Events prettily</h4>
+            </div>
+            <div class="foot-links flex md:gap-0 gap-8 md:flex-row flex-col justify-between">
+                <div class="space-y-4">
+                    <h6 class="text-xl font-bold">Quick Links</h6>
+                    <ul class="grid gap-4 grid-cols-2 md:grid-cols-1 text-lg">
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Home</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Contact Us</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Dashboard</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Events</li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h6 class="text-xl font-bold">About Us</h6>
+                    <ul class="grid gap-4 grid-cols-2 md:grid-cols-1 text-lg">
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Guides</li>
+                        <li class="hover:font-semibold font-medium cursor-pointer">Our Team</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Blogs</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Courses</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Development Repo</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">More Products</li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h6 class="text-xl font-bold">Legal</h6>
+                    <ul class="grid gap-4 grid-cols-2 md:grid-cols-1 text-lg">
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Terms & Conditions</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Privacy Policy</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">Fund Policy</li>
+                        <li class="hover:font-semibold hover:scale-105 transition-transform font-medium cursor-pointer">License</li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h6 class="text-xl font-bold">Social</h6>
+                    <ul class="flex gap-8 text-4xl">
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-blue-600"><i class="fab fa-linkedin"></i></li>
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-blue-500"><i class="fab fa-facebook"></i></li>
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-gray-900"><i class="fab fa-github"></i></li>
+                        <li class="hover:font-semibold hover:scale-125 hover:-translate-y-1 transition-transform text-black"><i class="fab fa-x-twitter"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

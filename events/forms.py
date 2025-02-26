@@ -40,10 +40,6 @@ class StylesMixin:
                 field.widget.attrs.update({
                     'class': f"{self.common_classes} w-48"
                 })
-            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
-                field.widget.attrs.update({
-                    'class': f"{self.common_classes} w-fit"
-                })
             elif isinstance(field.widget, forms.FileInput):
                 field.widget.attrs.update({
                     'class': self.common_classes
@@ -53,13 +49,12 @@ class StylesMixin:
 class CreateEvent(StylesMixin, forms.ModelForm):
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = ['name', 'description', 'date', 'time', 'location', 'category', 'thumb']
         widgets = {
             'date': forms.SelectDateWidget,
             'time': forms.TimeInput(attrs={
                 'type': 'time'
             }),
-            'participants': forms.CheckboxSelectMultiple
         }
     def __init__(self, *args, **kwargs):
         categories = kwargs.pop('categories', [])
