@@ -46,7 +46,7 @@ class StylesMixin:
                 })
 
 #* Event Creation ModelForm
-class CreateEvent(StylesMixin, forms.ModelForm):
+class EventForm(StylesMixin, forms.ModelForm):
     class Meta:
         model = Event
         fields = ['name', 'description', 'date', 'time', 'location', 'category', 'thumb']
@@ -63,7 +63,7 @@ class CreateEvent(StylesMixin, forms.ModelForm):
         self.fields['category'].choices = [(categ.id, categ.name) for categ in categories]
 
 #* Category Creation ModelForm
-class CreateCategory(StylesMixin, forms.ModelForm):
+class CategoryForm(StylesMixin, forms.ModelForm):
     class Meta:
         model = Category
         fields = '__all__'

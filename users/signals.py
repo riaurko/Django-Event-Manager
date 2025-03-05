@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
+from events.models import Event
 
 @receiver(post_save, sender=User)
 def send_activation_email(sender, instance, created, **kwargs):
@@ -26,9 +27,12 @@ def send_activation_email(sender, instance, created, **kwargs):
         except Exception as err:
             print(f"Failed to sent email to {instance.email} for: {str(err)}")
 
+
 @receiver(post_save, sender=User)
 def assign_role(sender, instance, created, **kwargs):
     if created:
+        user_group, created = Group.objects.get_or_create(name='User')
         participant_group = Group.objects.get(name='Participant')
+        instance.groups.add(user_group)
         instance.groups.add(participant_group)
         instance.save()

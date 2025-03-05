@@ -2,13 +2,17 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from django.db.models import Count, Q, Prefetch
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView
+from django.views.generic import FormView
 from datetime import date
 from users.forms import UserSignUp, UserLogin, AssignRole, CreateGroup
 from events.models import Event
 
+#* Role Checking Views
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
 
@@ -18,6 +22,8 @@ def is_organizer(user):
 def is_participant(user):
     return user.groups.filter(name='Participant').exists()
 
+
+#* Registration Views
 def sign_up(request):
     form = UserSignUp()
     if request.method == 'POST':
@@ -31,7 +37,7 @@ def sign_up(request):
             return redirect('login')
     return render(request, "registration/sign_up.html", {'form': form})
 
-def log_in(request):
+def log_in(request): #? CBV-A LoginView
     form = UserLogin()
     if request.method == 'POST':
         form = UserLogin(data=request.POST)
@@ -53,13 +59,13 @@ def activate_user(request, user_id, token):
     except User.DoesNotExist:
         return HttpResponse("<h3>404: Not Found<br/>User Not Found</h3>")
 
-
 @login_required
-def log_out(request):
+def log_out(request): #? CBV-A LogoutView
     if request.method == 'POST':
         logout(request)
         return redirect("login")
 
+#* Group Views
 @permission_required("users.add_group", 'no-access')
 def create_group(request):
     form = CreateGroup()
@@ -70,6 +76,11 @@ def create_group(request):
             messages.success(request, f"New Group {group.name} created successfully")
             return redirect("create-group")
     return render(request, "admin/create_group.html", {'form': form})
+
+@permission_required("users.view_group", 'no-access')
+def view_group(request):
+    groups = Group.objects.prefetch_related('permissions').all().order_by('name')
+    return render(request, "admin/view_group.html", {'groups': groups})
 
 @user_passes_test(is_admin, 'no-access')
 def assign_role(request, user_id):
@@ -84,11 +95,8 @@ def assign_role(request, user_id):
             messages.success(request, f"{user.username} is successfully assigned to {role.name} Role.")
     return render(request, "admin/assign_role.html", {'form': form})
 
-@permission_required("users.view_group", 'no-access')
-def view_group(request):
-    groups = Group.objects.prefetch_related('permissions').all().order_by('name')
-    return render(request, "admin/view_group.html", {'groups': groups})
 
+#* Dashboard Views
 @login_required
 @user_passes_test(is_admin, 'no-access')
 def admin_dashboard(request):
